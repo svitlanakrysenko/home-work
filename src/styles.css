@@ -14,4 +14,30 @@ h1 {
 }
 label {
     font-weight: bold;
+	font-size: 18px;
+}
+.material-icons {
+    font-size: 18px;
+	color:#5e91f0;
+	background-color: transparent;
+	border: none;
+}
+
+.item-container {
+	display: flex;
+    flex-direction: column;
+	width: 18%;
+}
+
+.item {
+	display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.item .item-name {
+	flex-grow: 1;
+	text-overflow: ellipsis;
+    overflow: hidden;
+	white-space: nowrap;
 }
