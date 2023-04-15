@@ -44,7 +44,8 @@ class SelectedIdStorage {
     key = 'selectedItemsIds';
 
     isSelected(id) {
-
+        const savedIds = this.getAll();
+        return savedIds.includes(id);
     }
 
     add(id) {
@@ -56,7 +57,9 @@ class SelectedIdStorage {
     }
 
     remove(id) {
-
+        const savedIds = this.getAll();
+        const filteredArray = savedIds.filter(x => x !== id);
+        this.saveAll(filteredArray);
     }
 
     getAll() {
@@ -89,29 +92,23 @@ function createItem() {
     const description = document.getElementById('description').value;
     const item = new Item(id, title, date, description);
     storage.createOrUpdate(item);
-    //console.log(storage.getAll()); redirect to index.html 
     navigateToNewList();
 }
 
 function showItems() {
     const items = storage.getAll();
-    // create and insert every item to container
     items.forEach(element => createAndInsertItem(element));
 }
 
 function createAndInsertItem(item) {
-    // <div class="item">
-    //     <input type="checkbox" id="item1" name="item1" value="Home_routine">
-    //     <label class="item-name" for="item1" title="Prepare for Easter">Prepare for Easter</label>
-    //     <button class="material-icons icon-font-size" onclick="editFunction">edit</button>
-    // </div>
     const rootElement = document.createElement('div');
     rootElement.setAttribute('class', 'item');
     const inputElement = document.createElement('input');
     inputElement.setAttribute('type', 'checkbox');
+    inputElement.setAttribute('class', 'checkbox');
     inputElement.setAttribute('id', `item${item.id}`);
     inputElement.checked = selectedIdStorage.isSelected(item.id);
-    // TODO: Hot to say selected items? => inputElement.value
+    inputElement.addEventListener("change", function() { changeSelectedId(this.checked, item.id); });
     const labelElement = document.createElement('label');
     labelElement.setAttribute('class', 'item-name');
     labelElement.setAttribute('for', `item${item.id}`);
@@ -120,14 +117,18 @@ function createAndInsertItem(item) {
     const buttonElement = document.createElement('button');
     buttonElement.innerText = 'edit';
     buttonElement.setAttribute('class', 'material-icons icon-font-size');
-    buttonElement.addEventListener("onclick", () => editFunction(item.id));
+    buttonElement.addEventListener("click", () => editFunction(item.id));
     rootElement.appendChild(inputElement);
     rootElement.appendChild(labelElement);
     rootElement.appendChild(buttonElement);
     const container = document.getElementById('container');
     container.appendChild(rootElement);
-    //document.body.insertBefore(element, container);
+}
 
+function changeSelectedId(isSelected, id) {
+    isSelected
+        ? selectedIdStorage.add(id)
+        : selectedIdStorage.remove(id);
 }
 
 function navigateToNewList() {
