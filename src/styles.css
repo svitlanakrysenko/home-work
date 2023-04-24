@@ -2,7 +2,7 @@ h1 {
 	text-decoration: underline;
 	text-decoration-color: #5e91f0;
 }
-.create-button {
+.create-button, .create-new {
 	border-radius: 5px;
 	border-width: 1px;
 	border-color: #5e91f0;
@@ -16,7 +16,7 @@ label {
     font-weight: bold;
 	font-size: 18px;
 }
-.material-icons {
+.icon-font-size {
     font-size: 18px;
 	color:#5e91f0;
 	background-color: transparent;

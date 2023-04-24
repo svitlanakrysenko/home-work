@@ -7,7 +7,7 @@
 	<link rel="stylesheet" href="styles.css" />
 </head>
 
-<body>
+<body onload="itemIsLoaded()">
 	<h1>TODO items</h1>
 	<div>
 		<!-- <div>
@@ -24,10 +24,12 @@
 		</div>
 		<div>
 			<label for="text">To do:</label>
-			<textarea name="message" id="description" rows="3" cols="33">Prepare for Easter.</textarea>
+			<textarea name="message" id="description" rows="3" cols="33"></textarea>
 		</div>
 		<div>
-			<button class="create-button" onclick="createItem()">Create</button>
+			<button class="create-button" id="createButton" onclick="createItem()">Create item</button>
+			<button class="create-button" id="updateButton" onclick="updateItem()">Update item</button>
+			<button class="create-button" id="cancelButton" onclick="cancelEdit()">Cancel</button>
 		</div>
 	</div>
 </body>

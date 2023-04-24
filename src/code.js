@@ -38,6 +38,22 @@ class ItemStorage {
 
         this.saveAll(savedItems);
     }
+
+    update(item) {
+        const savedItems = this.getAll();
+        const savedItem = savedItems.find(x => x.id === item.id);
+        savedItem.title = item.title;
+        savedItem.date = item.date;
+        savedItem.description = item.description;
+
+        this.saveAll(savedItems);
+    }
+
+    remove(id) {
+        const savedItems = this.getAll();
+        const filteredArray = savedItems.filter(x => x.id !== id);
+        this.saveAll(filteredArray);
+    }
 }
 
 class SelectedIdStorage {
@@ -108,7 +124,7 @@ function createAndInsertItem(item) {
     inputElement.setAttribute('class', 'checkbox');
     inputElement.setAttribute('id', `item${item.id}`);
     inputElement.checked = selectedIdStorage.isSelected(item.id);
-    inputElement.addEventListener("change", function() { changeSelectedId(this.checked, item.id); });
+    inputElement.addEventListener("change", function () { changeSelectedId(this.checked, item.id); });
     const labelElement = document.createElement('label');
     labelElement.setAttribute('class', 'item-name');
     labelElement.setAttribute('for', `item${item.id}`);
@@ -118,9 +134,14 @@ function createAndInsertItem(item) {
     buttonElement.innerText = 'edit';
     buttonElement.setAttribute('class', 'material-icons icon-font-size');
     buttonElement.addEventListener("click", () => editFunction(item.id));
+    const buttonDeleteElement = document.createElement('button');
+    buttonDeleteElement.innerText = 'delete';
+    buttonDeleteElement.setAttribute('class', 'material-icons icon-font-size');
+    buttonDeleteElement.addEventListener("click", () => deleteFunction(item.id));
     rootElement.appendChild(inputElement);
     rootElement.appendChild(labelElement);
     rootElement.appendChild(buttonElement);
+    rootElement.appendChild(buttonDeleteElement);
     const container = document.getElementById('container');
     container.appendChild(rootElement);
 }
@@ -133,4 +154,51 @@ function changeSelectedId(isSelected, id) {
 
 function navigateToNewList() {
     location.href = 'file:///E:/projects/home-work/src/index.html';
+}
+
+function editFunction(id) {
+    location.href = `file:///E:/projects/home-work/src/item.html?id=${id}`;
+
+}
+
+function itemIsLoaded() {
+    const searchParams = new URLSearchParams(window.location.search);
+    const id = searchParams.get("id");
+    const item = id && storage.get(+id);
+    if (item) {
+        document.getElementById('createButton')?.remove();
+        document.getElementById('title').value = item.title;
+        document.getElementById('date').value = item.date;
+        document.getElementById('description').value = item.description;
+    } else {
+        document.getElementById('updateButton')?.remove();
+    }
+    //search id item in URL and if id exist remove button create< if not then remove button update
+    //then need to fill fields of searched item with its values
+
+}
+
+function deleteFunction(id) {
+    //const savedItems = storage.getAll();
+    //const deletedItem = savedItems.find(x => x === id);
+    storage.remove(id);
+    selectedIdStorage.remove(id);
+    navigateToNewList();
+
+}
+
+function cancelEdit() {
+    navigateToNewList();
+}
+
+function updateItem() {
+    //save updates or cancel edit and redirect to index.html navigateToNewList()
+    const searchParams = new URLSearchParams(window.location.search);
+    const id = +searchParams.get("id");
+    const title = document.getElementById('title').value;
+    const date = document.getElementById('date').value;
+    const description = document.getElementById('description').value;
+    const item = new Item(id, title, date, description);
+    storage.update(item);
+    navigateToNewList();
 }
