@@ -173,18 +173,14 @@ function itemIsLoaded() {
     } else {
         document.getElementById('updateButton')?.remove();
     }
-    //search id item in URL and if id exist remove button create< if not then remove button update
-    //then need to fill fields of searched item with its values
-
 }
 
 function deleteFunction(id) {
-    //const savedItems = storage.getAll();
-    //const deletedItem = savedItems.find(x => x === id);
-    storage.remove(id);
-    selectedIdStorage.remove(id);
-    navigateToNewList();
-
+    if (window.confirm("Do you really want to delete?")) {
+        storage.remove(id);
+        selectedIdStorage.remove(id);
+        navigateToNewList();
+    }
 }
 
 function cancelEdit() {
@@ -192,7 +188,6 @@ function cancelEdit() {
 }
 
 function updateItem() {
-    //save updates or cancel edit and redirect to index.html navigateToNewList()
     const searchParams = new URLSearchParams(window.location.search);
     const id = +searchParams.get("id");
     const title = document.getElementById('title').value;
